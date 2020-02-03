@@ -22,5 +22,9 @@ declare class YylRevWebpackPlugin {
   constructor(op: WebpackPluginOption)
 }
 interface WebpackPluginOption {
+  basePath: string
+  revRoot?: string
+  revAddr: string
+  remote: boolean
 }
 export =YylRevWebpackPlugin 
