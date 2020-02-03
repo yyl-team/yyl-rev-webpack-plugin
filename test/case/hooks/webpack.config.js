@@ -11,6 +11,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 
 const IPlugin = require('../../../index')
+const ExtPlugin = require('./ext-plugin')
 
 const util = require('yyl-util')
 
@@ -40,8 +41,6 @@ const config = {
 
 // + plugin options
 const iPluginOption = {
-  dirs: [],
-  data: config.alias
 }
 // - plugin options
 
@@ -281,6 +280,10 @@ wConfig.plugins = wConfig.plugins.concat((function () { // html 输出
 // - html output
 wConfig.plugins.push(
   new IPlugin(iPluginOption)
+)
+
+wConfig.plugins.push(
+  new ExtPlugin()
 )
 
 // + dev server

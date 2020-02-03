@@ -1,9 +1,17 @@
-// const PLUGIN_NAME = 'iPlugin'
+const { getHooks } = require('./lib/hooks')
+
+const PLUGIN_NAME = 'yylRev'
 // const printError = function(msg) {
 //   throw `__inline('name') error: ${msg}`
 // }
 
-class IWebpackPlugin {
+class YylRevWebpackPlugin {
+  static getName() {
+    return PLUGIN_NAME
+  }
+  static getHooks(compilation) {
+    return getHooks(compilation)
+  }
   constructor() {
     // TODO:
   }
@@ -17,4 +25,4 @@ class IWebpackPlugin {
   }
 }
 
-module.exports = IWebpackPlugin
+module.exports = YylRevWebpackPlugin
