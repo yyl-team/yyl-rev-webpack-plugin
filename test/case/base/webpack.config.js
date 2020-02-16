@@ -197,6 +197,7 @@ const wConfig = {
       fileMap: (() => {
         const r = {}
         r[path.join(DIST_ROOT, 'js/demo.js')] = ['src/source/js/a.js', 'src/source/js/b.js']
+        return r
       })()
     }),
     new YylSugarWebpackPlugin({
