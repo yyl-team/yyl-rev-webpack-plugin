@@ -15,11 +15,20 @@ class YylRevWebpackPlugin {
     return getHooks(compilation)
   }
   constructor(op) {
-    const { basePath, revAddr, remote, revRoot } = op
-    this.basePath = basePath
-    this.revAddr = revAddr
-    this.remote = remote
-    this.revRoot = revRoot
+    this.options = Object.assign({
+      /** 执行程序的路径，与 webpack.config 所在路径相同 */
+      basePath: process.cwd(),
+      /** 文件名称 */
+      name: '../assets/rev-mainfest.json',
+      /** rev 输出内容的相对地址 */
+      revAddr: '../',
+      /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
+      remoteAddr: '',
+      /** 是否映射线上配置 */
+      remote: false,
+      /** 扩展参数, 会追加到 rev json 里面 */
+      extends: {}
+    }, op)
   }
   getFileType(str) {
     str = str.replace(/\?.*/, '')
@@ -46,6 +55,7 @@ class YylRevWebpackPlugin {
       async (compilation, done) => {
         // + init assetMap
         const assetMap = {}
+        const { option } = this
         compilation.chunks.forEach((chunk) => {
           chunk.files.forEach((fName) => {
             if (chunk.name) {
@@ -73,7 +83,29 @@ class YylRevWebpackPlugin {
         const iHooks = getHooks(compilation)
 
         console.log(this.assetMap, output)
+
         // TODO: build something
+        let fileInfo = {
+          name: option.name,
+          content: ''
+        }
+
+        // hook afterRev
+        fileInfo = await iHooks.afterRev.promise(fileInfo)
+        const finalName = path.join(output.path, fileInfo.name)
+
+        // add to assets
+        compilation.assets[finalName] = {
+          source() {
+            return fileInfo.content
+          },
+          size() {
+            return fileInfo.content.length
+          }
+        }
+        compilation.hooks.moduleAsset.call({
+          userRequest: fileInfo.name
+        }, finalName)
 
         await iHooks.emit.promise()
         // - init assetMap
