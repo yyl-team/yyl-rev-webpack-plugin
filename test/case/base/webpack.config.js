@@ -14,6 +14,7 @@ const IPlugin = require('../../../index')
 
 const util = require('yyl-util')
 
+const DIST_ROOT = path.join(__dirname, 'dist/project/yycom/pc')
 // + setting
 const config = {
   proxy: {
@@ -25,11 +26,11 @@ const config = {
     root: path.join(__dirname, 'dist'),
     srcRoot: path.join(__dirname, 'src'),
 
-    jsDest: path.join(__dirname, 'dist/assets/js'),
+    jsDest: path.join(DIST_ROOT, 'js'),
     htmlDest: path.join(__dirname, 'dist/'),
-    cssDest: path.join(__dirname, 'dist/assets/css'),
-    imagesDest: path.join(__dirname, 'dist/assets/images'),
-    sourceDest: path.join(__dirname, 'dist/assets/source')
+    cssDest: path.join(DIST_ROOT, 'css'),
+    imagesDest: path.join(DIST_ROOT, 'images'),
+    sourceDest: path.join(DIST_ROOT, 'source')
   },
   dest: {
     basePath: '/'
@@ -40,8 +41,12 @@ const config = {
 
 // + plugin options
 const iPluginOption = {
-  dirs: [],
-  data: config.alias
+  remote: true,
+  remoteAddr: 'https://web.yystatic.com/project/yycom/pc/assets/rev-manifest.json',
+  remoteBlankCss: true,
+  extends: {
+    'ext01': +new Date()
+  }
 }
 // - plugin options
 
@@ -189,9 +194,10 @@ const wConfig = {
     }]),
     new YylConcatWebpackPlugin({
       basePath: __dirname,
-      fileMap: {
-        'dist/assets/source/js/demo.js': ['src/source/js/a.js', 'src/source/js/b.js']
-      }
+      fileMap: (() => {
+        const r = {}
+        r[path.join(DIST_ROOT, 'js/demo.js')] = ['src/source/js/a.js', 'src/source/js/b.js']
+      })()
     }),
     new YylSugarWebpackPlugin({
       basePath: __dirname

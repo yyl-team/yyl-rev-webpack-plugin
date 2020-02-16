@@ -10,26 +10,29 @@ interface FileInfo {
 }
 
 interface Hooks {
-  beforeRev: AsyncSeriesWaterfallHook<FileInfo>
+  /** 生成rev map 之后触发 */
   afterRev: AsyncSeriesWaterfallHook<FileInfo>
+  /** 提交时触发 */
   emit: AsyncSeriesWaterfallHook<undefined>
 }
 
 
 declare class YylRevWebpackPlugin {
+  /** 获取钩子 */
   static getHooks(compilation: any): Hooks
+  /** 获取组件名称 */
   static getName(): string
   constructor(op: WebpackPluginOption)
 }
 interface WebpackPluginOption {
-  /** 执行程序的路径，与 webpack.config 所在路径相同 */
-  basePath: string
   /** rev 文件名称 */
   name: string
   /** rev 输出内容的相对地址 */
   revRoot?: string
   /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
   remoteAddr?: string
+  /** 映射线上配置时如线上对应本地 css 文件为空时，自动在本地生成空白css */
+  remoteBlankCss: boolean
   /** 是否映射线上配置 */
   remote: boolean
   /** 扩展参数, 会追加到 rev json 里面 */

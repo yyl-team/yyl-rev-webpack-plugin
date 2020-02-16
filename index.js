@@ -1,11 +1,17 @@
 const path = require('path')
 const util = require('yyl-util')
 const { getHooks } = require('./lib/hooks')
+const LANG = require('./lang/index')
+const request = require('yyl-request')
 
 const PLUGIN_NAME = 'yylRev'
 // const printError = function(msg) {
 //   throw `__inline('name') error: ${msg}`
 // }
+
+function formatPath (iPath) {
+  return iPath.split(path.sep).join('/')
+}
 
 class YylRevWebpackPlugin {
   static getName() {
@@ -15,15 +21,15 @@ class YylRevWebpackPlugin {
     return getHooks(compilation)
   }
   constructor(op) {
-    this.options = Object.assign({
-      /** 执行程序的路径，与 webpack.config 所在路径相同 */
-      basePath: process.cwd(),
+    this.option = Object.assign({
       /** 文件名称 */
-      name: '../assets/rev-mainfest.json',
+      name: '../assets/rev-manifest.json',
       /** rev 输出内容的相对地址 */
-      revAddr: '../',
+      revRoot: '../',
       /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
       remoteAddr: '',
+      /** 映射线上配置时如线上对应本地 css 文件为空时，自动在本地生成空白css */
+      remoteBlankCss: true,
       /** 是否映射线上配置 */
       remote: false,
       /** 扩展参数, 会追加到 rev json 里面 */
@@ -56,6 +62,10 @@ class YylRevWebpackPlugin {
         // + init assetMap
         const assetMap = {}
         const { option } = this
+        const logger = compilation.getLogger(PLUGIN_NAME)
+
+        logger.group(PLUGIN_NAME)
+
         compilation.chunks.forEach((chunk) => {
           chunk.files.forEach((fName) => {
             if (chunk.name) {
@@ -79,36 +89,133 @@ class YylRevWebpackPlugin {
           }
         })
         this.assetMap = assetMap
+        // - init assetMap
 
         const iHooks = getHooks(compilation)
 
-        console.log(this.assetMap, output)
+        const rMap = {}
+        const revRoot = path.resolve(output.path, option.revRoot)
+        /** 将基于 output.path 的相对地址转回 基于 revRoot 的 */
+        const formatAssets = function (iPath) {
+          return formatPath(
+            path.relative(
+              revRoot,
+              path.join(output.path, iPath)
+            )
+          )
+        }
+        /** 将基于 revRoot 的相对地址转回 基于 output.path 的 */
+        const recyleAsset = function (iPath) {
+          return path.relative(
+            output.path,
+            path.resolve(revRoot, iPath)
+          )
+        }
 
-        // TODO: build something
-        let fileInfo = {
-          name: option.name,
-          content: ''
+        /** 添加文件到构建流 */
+        const addAssets = function (fileInfo) {
+          compilation.assets[fileInfo.name] = {
+            source() {
+              return fileInfo.content
+            },
+            size() {
+              return fileInfo.content.length
+            }
+          }
+          compilation.hooks.moduleAsset.call({
+            userRequest: fileInfo.name
+          }, fileInfo.name)
+        }
+
+        Object.keys(this.assetMap).forEach((key) => {
+          const src = formatAssets(key)
+          const dest = formatAssets(this.assetMap[key])
+          rMap[src] = dest
+        })
+
+        if (option.remote && option.remoteAddr) {
+          logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${option.remoteAddr}`)
+          const [err, rs] = await request(option.remoteAddr)
+          if (err) {
+            logger.warn(`${LANG.FETCH_FAIL}: ${err.message}`)
+          } else {
+            let remoteMap = {}
+
+            try {
+              remoteMap = JSON.parse(rs.body)
+              logger.info(`${LANG.FETCH_SUCCESS}`)
+            } catch (er) {
+              logger.info(`${LANG.REMOTE_PARSE_ERROR}: ${er.message}`)
+            }
+            const remoteFileInfoArr = []
+            const blankCssFileInfoArr = []
+            Object.keys(remoteMap).forEach((key) => {
+              const iExt = path.extname(key)
+              if (!iExt) {
+                return
+              }
+              if (rMap[key]) {
+                // 需要额外生成文件
+                if (rMap[key] !== remoteMap[key]) {
+                  remoteFileInfoArr.push({
+                    name: recyleAsset(remoteMap[key]),
+                    content: compilation.assets[recyleAsset(rMap[key])].source()
+                  })
+                }
+              } else {
+                if (iExt === '.css' && option.remoteBlankCss) {
+                  // 空白css
+                  blankCssFileInfoArr.push({
+                    name: recyleAsset(remoteMap[key]),
+                    content: ''
+                  })
+                }
+              }
+            })
+            if (remoteFileInfoArr.length) {
+              logger.info(`${LANG.BUILD_REMOTE_SOURCE}:`)
+              remoteFileInfoArr.forEach((fileInfo) => {
+                addAssets(fileInfo)
+                logger.info(`-> ${fileInfo.name}`)
+              })
+            }
+            if (blankCssFileInfoArr.length) {
+              logger.info(`${LANG.BUILD_BLANK_CSS}:`)
+              blankCssFileInfoArr.forEach((fileInfo) => {
+                addAssets(fileInfo)
+                logger.info(`-> ${fileInfo.name}`)
+              })
+            }
+          }
+        } else {
+          logger.info(LANG.DISABLE_FETCH_REMOTE)
+        }
+
+        if (option.extends) {
+          Object.assign(rMap, option.extends)
+          logger.info(`${LANG.BUILD_EXTEND_INFO}:`)
+          Object.keys(option.extends).forEach((key) => {
+            logger.info(`${key} => ${option.extends[key]}`)
+          })
+        }
+
+        let revFileInfo = {
+          name: path.relative(
+            output.path,
+            path.resolve(output.path, option.name)
+          ),
+          content: JSON.stringify(rMap, null, 2)
         }
 
         // hook afterRev
-        fileInfo = await iHooks.afterRev.promise(fileInfo)
-        const finalName = path.join(output.path, fileInfo.name)
+        revFileInfo = await iHooks.afterRev.promise(revFileInfo)
 
         // add to assets
-        compilation.assets[finalName] = {
-          source() {
-            return fileInfo.content
-          },
-          size() {
-            return fileInfo.content.length
-          }
-        }
-        compilation.hooks.moduleAsset.call({
-          userRequest: fileInfo.name
-        }, finalName)
+        addAssets(revFileInfo)
 
         await iHooks.emit.promise()
-        // - init assetMap
+
+        logger.groupEnd()
         done()
       }
     )

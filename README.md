@@ -5,7 +5,20 @@
 const YylRevWebpackPlugin = require('yyl-rev-webpack-plugin')
 const wConfig = {
   plugins: [
-    new YylRevWebpackPlugin({ basePath: __dirname })
+    new YylRevWebpackPlugin({
+      /** 文件名称 */
+      name: '../assets/rev-manifest.json',
+      /** rev 输出内容的相对地址 */
+      revRoot: '../',
+      /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
+      remoteAddr: '',
+      /** 映射线上配置时如线上对应本地 css 文件为空时，自动在本地生成空白css */
+      remoteBlankCss: true,
+      /** 是否映射线上配置 */
+      remote: false,
+      /** 扩展参数, 会追加到 rev json 里面 */
+      extends: {}
+    })
   ]
 }
 ```
@@ -27,10 +40,6 @@ class ExtPlugin {
     const IPlugin = YylRevWebpackPlugin
     if (IPlugin) {
       compiler.hooks.compilation.tap(IPlugin.getName(), (compilation) => {
-        IPlugin.getHooks(compilation).beforeRev.tapAsync(PLUGIN_NAME, (obj, done) => {
-          console.log('hooks.beforeRev(obj, done)', 'obj:', obj)
-          done(null, obj)
-        })
         IPlugin.getHooks(compilation).afterRev.tapAsync(PLUGIN_NAME, (obj, done) => {
           console.log('hooks.afterRev(obj, done)', 'obj:', obj)
           done(null, obj)
@@ -60,18 +69,33 @@ interface FileInfo {
 }
 
 interface Hooks {
-  beforeRev: AsyncSeriesWaterfallHook<FileInfo>
+  /** 生成rev map 之后触发 */
   afterRev: AsyncSeriesWaterfallHook<FileInfo>
+  /** 提交时触发 */
   emit: AsyncSeriesWaterfallHook<undefined>
 }
 
 
 declare class YylRevWebpackPlugin {
+  /** 获取钩子 */
   static getHooks(compilation: any): Hooks
+  /** 获取组件名称 */
   static getName(): string
   constructor(op: WebpackPluginOption)
 }
 interface WebpackPluginOption {
+  /** rev 文件名称 */
+  name: string
+  /** rev 输出内容的相对地址 */
+  revRoot?: string
+  /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
+  remoteAddr?: string
+  /** 映射线上配置时如线上对应本地 css 文件为空时，自动在本地生成空白css */
+  remoteBlankCss: boolean
+  /** 是否映射线上配置 */
+  remote: boolean
+  /** 扩展参数, 会追加到 rev json 里面 */
+  extends?: {[key: string]: string|number}
 }
 export =YylRevWebpackPlugin 
 ```
