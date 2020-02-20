@@ -23,7 +23,7 @@ class YylRevWebpackPlugin {
   constructor(op) {
     this.option = Object.assign({
       /** 文件名称 */
-      name: '../assets/rev-manifest.json',
+      filename: '../assets/rev-manifest.json',
       /** rev 输出内容的相对地址 */
       revRoot: '../',
       /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
@@ -202,7 +202,7 @@ class YylRevWebpackPlugin {
         let revFileInfo = {
           name: path.relative(
             output.path,
-            path.resolve(output.path, option.name)
+            path.resolve(output.path, option.filename)
           ),
           content: JSON.stringify(rMap, null, 2)
         }

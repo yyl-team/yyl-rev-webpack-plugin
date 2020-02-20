@@ -182,22 +182,27 @@ const wConfig = {
       chunkFilename: '[name]-[chunkhash:8].css',
       allChunks: true
     }),
-    new YylCopyWebpackPlugin([{
-      from: path.join(config.alias.srcRoot, 'source'),
-      to: config.alias.sourceDest,
-      fileName: '[name].[ext]',
-      matcher: ['*.html', '!**/.*']
-    }, {
-      from: path.join(config.alias.srcRoot, 'source'),
-      to: config.alias.sourceDest,
-      fileName: '[name]-[hash:8].[ext]',
-      matcher: ['!*.html', '!**/.*']
-    }]),
+    new YylCopyWebpackPlugin({
+      files: [{
+        from: path.join(config.alias.srcRoot, 'source'),
+        to: config.alias.sourceDest,
+        filename: '[name].[ext]',
+        matcher: ['*.html', '!**/.*']
+      }, {
+        from: path.join(config.alias.srcRoot, 'source'),
+        to: config.alias.sourceDest,
+        filename: '[name]-[hash:8].[ext]',
+        matcher: ['!*.html', '!**/.*']
+      }],
+      logBasePath: __dirname,
+      basePath: __dirname
+    }),
     new YylConcatWebpackPlugin({
       basePath: __dirname,
       fileMap: (() => {
         const r = {}
         r[path.join(DIST_ROOT, 'js/demo.js')] = ['src/source/js/a.js', 'src/source/js/b.js']
+        return r
       })()
     }),
     new YylSugarWebpackPlugin({

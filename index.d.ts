@@ -26,15 +26,15 @@ declare class YylRevWebpackPlugin {
 }
 interface WebpackPluginOption {
   /** rev 文件名称 */
-  name: string
+  filename: string
   /** rev 输出内容的相对地址 */
   revRoot?: string
   /** 线上配置地址，用于映射线上配置在本地生成一模一样的文件 */
   remoteAddr?: string
   /** 映射线上配置时如线上对应本地 css 文件为空时，自动在本地生成空白css */
-  remoteBlankCss: boolean
+  remoteBlankCss?: boolean
   /** 是否映射线上配置 */
-  remote: boolean
+  remote?: boolean
   /** 扩展参数, 会追加到 rev json 里面 */
   extends?: {[key: string]: string|number}
 }
