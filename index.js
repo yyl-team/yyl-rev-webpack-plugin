@@ -112,7 +112,7 @@ class YylRevWebpackPlugin {
           )
         }
 
-        /** 添加文件到构建流 */
+        /** 添加rev文件到构建流 */
         const addAssets = function (fileInfo) {
           compilation.assets[fileInfo.name] = {
             source() {
@@ -127,10 +127,19 @@ class YylRevWebpackPlugin {
           }, fileInfo.name)
         }
 
+        logger.info(`${LANG.BUILD_NOHASH_FILE}:`)
         Object.keys(this.assetMap).forEach((key) => {
+          // 创建 revMap
           const src = formatAssets(key)
           const dest = formatAssets(this.assetMap[key])
           rMap[src] = dest
+
+          // 生成不带 hash 的文件
+          addAssets({
+            name: key,
+            content: compilation.assets[this.assetMap[key]].source()
+          })
+          logger.info(`-> ${key}`)
         })
 
         if (option.remote && option.remoteAddr) {
