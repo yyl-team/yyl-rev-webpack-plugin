@@ -165,7 +165,7 @@ class YylRevWebpackPlugin {
               }
               if (rMap[key]) {
                 // 需要额外生成文件
-                if (rMap[key] !== remoteMap[key]) {
+                if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
                   remoteFileInfoArr.push({
                     name: recyleAsset(remoteMap[key]),
                     content: compilation.assets[recyleAsset(rMap[key])].source()
