@@ -1,6 +1,6 @@
 {
   "name": "yyl-rev-webpack-plugin",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "engines": {
     "node": ">= 8.0.0"
   },
@@ -18,7 +18,7 @@
     "webpack": "^4.41.1",
     "yyl-fs": "^0.3.3",
     "yyl-os": "^0.10.2",
-    "yyl-sugar-webpack-plugin": "^0.1.0",
+    "yyl-sugar-webpack-plugin": "^0.1.9",
     "yyl-util": "^2.3.7"
   },
   "dependencies": {

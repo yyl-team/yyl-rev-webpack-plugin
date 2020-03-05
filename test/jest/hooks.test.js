@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const util = require('yyl-util')
 const extFs = require('yyl-fs')
 
-jest.setTimeout(30000)
+jest.setTimeout(300000)
 
 test('case hooks test', async() => {
   const targetPath = path.join(__dirname, '../case/hooks')
