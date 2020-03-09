@@ -3,6 +3,7 @@ const util = require('yyl-util')
 const { getHooks } = require('./lib/hooks')
 const LANG = require('./lang/index')
 const request = require('yyl-request')
+const chalk = require('chalk')
 
 const PLUGIN_NAME = 'yylRev'
 // const printError = function(msg) {
@@ -188,14 +189,14 @@ class YylRevWebpackPlugin {
               logger.info(`${LANG.BUILD_REMOTE_SOURCE}:`)
               remoteFileInfoArr.forEach((fileInfo) => {
                 addAssets(fileInfo)
-                logger.info(`-> ${fileInfo.name}`)
+                logger.info(`-> ${chalk.cyan(fileInfo.name)}`)
               })
             }
             if (blankCssFileInfoArr.length) {
               logger.info(`${LANG.BUILD_BLANK_CSS}:`)
               blankCssFileInfoArr.forEach((fileInfo) => {
                 addAssets(fileInfo)
-                logger.info(`-> ${fileInfo.name}`)
+                logger.info(`-> ${chalk.cyan(fileInfo.name)}`)
               })
             }
           }
@@ -207,7 +208,7 @@ class YylRevWebpackPlugin {
           Object.assign(rMap, option.extends)
           logger.info(`${LANG.BUILD_EXTEND_INFO}:`)
           Object.keys(option.extends).forEach((key) => {
-            logger.info(`${key} => ${option.extends[key]}`)
+            logger.info(`${chalk.green(key)} -> ${chalk.cyan(option.extends[key])}`)
           })
         }
 
