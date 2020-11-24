@@ -14,6 +14,14 @@ function formatPath (iPath) {
   return iPath.split(path.sep).join('/')
 }
 
+function formatUrl (url) {
+  let r = url
+  if (/^\/\//.test(url)) {
+    r = `http:${r}`
+  }
+  return `${r}${r.indexOf('?') === -1 ? '?' : '&'}_=${+new Date()}`
+}
+
 class YylRevWebpackPlugin {
   static getName() {
     return PLUGIN_NAME
@@ -147,7 +155,7 @@ class YylRevWebpackPlugin {
         })
 
         if (option.remote && option.remoteAddr) {
-          const requestUrl = `${option.remoteAddr}?${+new Date()}`
+          const requestUrl = formatUrl(option.remoteAddr)
           logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${requestUrl}`)
           const [err, rs] = await request(requestUrl)
           if (err) {
