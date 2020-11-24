@@ -147,8 +147,9 @@ class YylRevWebpackPlugin {
         })
 
         if (option.remote && option.remoteAddr) {
-          logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${option.remoteAddr}`)
-          const [err, rs] = await request(option.remoteAddr)
+          const requestUrl = `${option.remoteAddr}?${+new Date()}`
+          logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${requestUrl}`)
+          const [err, rs] = await request(requestUrl)
           if (err) {
             logger.warn(`${LANG.FETCH_FAIL}: ${err.message}`)
           } else {
@@ -157,6 +158,9 @@ class YylRevWebpackPlugin {
             try {
               remoteMap = JSON.parse(rs.body)
               logger.info(`${LANG.FETCH_SUCCESS}`)
+              Object.keys(remoteMap).forEach((key) => {
+                logger.info(`${key} -> ${chalk.cyan(remoteMap[key])}`)
+              })
             } catch (er) {
               logger.info(`${LANG.REMOTE_PARSE_ERROR}: ${er.message}`)
             }
