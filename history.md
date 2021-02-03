@@ -1,5 +1,7 @@
 # 历史版本
+## 1.0.1 (2020-02-03)
 
+- feat: 更新 `yyl-webpack-plugin-base@1.0.2`
 ## 1.0.0 (2020-02-03)
 
 - feat: 兼容 webpack5

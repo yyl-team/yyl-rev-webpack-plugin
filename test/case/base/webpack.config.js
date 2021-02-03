@@ -41,7 +41,11 @@ const wConfig = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'url-loader'
+        loader: 'url-loader',
+        options: {
+          limit: 0,
+          name: '[name]-[hash:8].[ext]'
+        }
       },
       {
         test: /\.css$/,
