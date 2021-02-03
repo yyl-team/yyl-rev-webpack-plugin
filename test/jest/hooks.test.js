@@ -6,9 +6,9 @@ const webpack = require('webpack')
 const util = require('yyl-util')
 const extFs = require('yyl-fs')
 
-jest.setTimeout(300000)
+jest.setTimeout(30000)
 
-test('case hooks test', async() => {
+test('case hooks test', async () => {
   const targetPath = path.join(__dirname, '../case/hooks')
   const distPath = path.join(targetPath, 'dist')
 
@@ -16,7 +16,7 @@ test('case hooks test', async() => {
   await extFs.mkdirSync(distPath)
 
   if (!fs.existsSync(path.join(targetPath, 'node_modules'))) {
-    await extOs.runSpawn('npm i', targetPath)
+    await extOs.runSpawn('yarn install', targetPath)
   }
 
   process.chdir(targetPath)
