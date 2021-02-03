@@ -1,6 +1,7 @@
 'use strict'
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const extOs = require('yyl-os')
 const IPlugin = require('../../../')
 
@@ -9,8 +10,8 @@ console.log(IPlugin)
 // + plugin options
 const iPluginOption = {
   context: __dirname,
-  remote: true,
-  remoteAddr: 'https://web.yystatic.com/project/yycom/pc/assets/rev-manifest.json',
+  // remote: true,
+  // remoteAddr: 'https://web.yystatic.com/project/yycom/pc/assets/rev-manifest.json',
   remoteBlankCss: true,
   extends: {
     ext01: +new Date()
@@ -60,6 +61,7 @@ const wConfig = {
   },
   devtool: 'source-map',
   plugins: [
+    new CleanWebpackPlugin(),
     new IPlugin(iPluginOption),
     new HtmlWebpackPlugin({
       template: './src/entry/index/index.html',
