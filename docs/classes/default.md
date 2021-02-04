@@ -25,6 +25,7 @@
 
 ### Methods
 
+- [addDependencies](default.md#adddependencies)
 - [apply](default.md#apply)
 - [getFileName](default.md#getfilename)
 - [getFileType](default.md#getfiletype)
@@ -47,7 +48,7 @@ Name | Type |
 
 **Returns:** [*default*](default.md)
 
-Defined in: [src/index.ts:64](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/c57868b/src/index.ts#L64)
+Defined in: [src/index.ts:64](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/f2321bc/src/index.ts#L64)
 
 ## Properties
 
@@ -57,7 +58,7 @@ Defined in: [src/index.ts:64](https://github.com/jackness1208/yyl-rev-webpack-pl
 
 resolve.alias 绝对路径
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:52
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:57
 
 ___
 
@@ -67,7 +68,7 @@ ___
 
 assetsMap
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:54
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:59
 
 ___
 
@@ -77,7 +78,7 @@ ___
 
 相对路径
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:46
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:51
 
 ___
 
@@ -87,7 +88,7 @@ ___
 
 输出文件格式
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:50
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:55
 
 ___
 
@@ -97,7 +98,7 @@ ___
 
 组件名称
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:48
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:53
 
 ___
 
@@ -105,9 +106,27 @@ ___
 
 • **option**: *Required*<[*YylRevWebpackPluginOption*](../interfaces/yylrevwebpackpluginoption.md)\>
 
-Defined in: [src/index.ts:56](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/c57868b/src/index.ts#L56)
+Defined in: [src/index.ts:56](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/f2321bc/src/index.ts#L56)
 
 ## Methods
+
+### addDependencies
+
+▸ **addDependencies**(`op`: AddDependenciesOption): *void*
+
+添加监听文件
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`op` | AddDependenciesOption |
+
+**Returns:** *void*
+
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:72
+
+___
 
 ### apply
 
@@ -121,7 +140,7 @@ Name | Type |
 
 **Returns:** *Promise*<*void*\>
 
-Defined in: [src/index.ts:99](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/c57868b/src/index.ts#L99)
+Defined in: [src/index.ts:99](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/f2321bc/src/index.ts#L99)
 
 ___
 
@@ -141,7 +160,7 @@ Name | Type |
 
 **Returns:** *string*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:59
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:64
 
 ___
 
@@ -159,7 +178,7 @@ Name | Type |
 
 **Returns:** *string*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:57
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:62
 
 ___
 
@@ -177,7 +196,7 @@ Name | Type |
 
 **Returns:** *Promise*<InitEmitHooksResult\>
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:61
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:66
 
 ___
 
@@ -195,7 +214,7 @@ Name | Type |
 
 **Returns:** *void*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:65
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:70
 
 ___
 
@@ -213,7 +232,7 @@ Name | Type |
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:52](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/c57868b/src/index.ts#L52)
+Defined in: [src/index.ts:52](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/f2321bc/src/index.ts#L52)
 
 ___
 
@@ -225,4 +244,4 @@ hooks 用方法: 获取插件名称
 
 **Returns:** *string*
 
-Defined in: [src/index.ts:47](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/c57868b/src/index.ts#L47)
+Defined in: [src/index.ts:47](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/f2321bc/src/index.ts#L47)

@@ -1,5 +1,5 @@
 /*!
- * yyl-rev-webpack-plugin cjs 1.0.2
+ * yyl-rev-webpack-plugin cjs 1.0.3
  * (c) 2020 - 2021 
  * Released under the MIT License.
  */
@@ -125,9 +125,9 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
     apply(compiler) {
         return __awaiter(this, void 0, void 0, function* () {
             const { output } = compiler.options;
-            const logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
-            logger.group(PLUGIN_NAME);
             const { compilation, done } = yield this.initCompilation(compiler);
+            const logger = compilation.getLogger(PLUGIN_NAME);
+            logger.group(PLUGIN_NAME);
             const iHooks = getHooks(compilation);
             const rMap = {};
             const revRoot = path__default['default'].resolve(output.path || '', this.option.revRoot);

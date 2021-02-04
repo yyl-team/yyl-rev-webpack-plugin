@@ -1,5 +1,5 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "output/index.js",
   "types": "output/index.d.ts",
   "eslintConfig": {
@@ -67,6 +67,6 @@
     "@types/request-promise": "^4.1.47",
     "request-promise": "^4.2.6",
     "tapable": "^2.2.0",
-    "yyl-webpack-plugin-base": "^0.1.2"
+    "yyl-webpack-plugin-base": "^0.1.6"
   }
 }

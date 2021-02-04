@@ -5523,9 +5523,9 @@ yyl-util@^2.3.5, yyl-util@^2.3.9:
   resolved "https://registry.npmjs.org/yyl-util/-/yyl-util-2.3.9.tgz#4c4f5d1af1c9b474e46db5cce6afbc82bbd586ce"
   integrity sha512-sKNudT5RApLNLDnHSppoR+K9yslDmof57gQ5yHDcX8xRADIv8r218DHIsyksSnlEmlld9TXAMYLeazAu4ufW0A==
 
-yyl-webpack-plugin-base@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.npmjs.org/yyl-webpack-plugin-base/-/yyl-webpack-plugin-base-0.1.4.tgz#8ac1fdd320e53103e76fed38a22e58eb0a4ba337"
-  integrity sha512-TvGF2dvabbOp61E8Ofg+E5ctmYQQlLcGjZCpdKUFOb2oA2flOe5K8RPcNECmc2TNvVQGIQNPxvr0LZUR9cb6Ww==
+yyl-webpack-plugin-base@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.npmjs.org/yyl-webpack-plugin-base/-/yyl-webpack-plugin-base-0.1.6.tgz#89d92960f0890ca9392a67aa7c48fe97f409b089"
+  integrity sha512-wUXZrz1xRx35K8MRMFtrIk7Eifeza9LwaSi3PAQ4lz6YRvFoCyw74LNaHwbyzlc8Xv1hNa7BtzF95jVrLYjy1Q==
   dependencies:
     yyl-util "^2.3.9"
