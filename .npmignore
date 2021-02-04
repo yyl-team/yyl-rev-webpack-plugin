@@ -4,6 +4,7 @@ dist/**
 **/dist/**
 output/**
 node_modules/**
+**/node_modules/**
 *.yml
 .gitignore
 .prettierignore

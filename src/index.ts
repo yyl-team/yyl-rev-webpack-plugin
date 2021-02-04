@@ -98,10 +98,10 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
 
   async apply(compiler: Compiler) {
     const { output } = compiler.options
-    const logger = compiler.getInfrastructureLogger(PLUGIN_NAME)
-    logger.group(PLUGIN_NAME)
 
     const { compilation, done } = await this.initCompilation(compiler)
+    const logger = compilation.getLogger(PLUGIN_NAME)
+    logger.group(PLUGIN_NAME)
     const iHooks = getHooks(compilation)
 
     const rMap: ModuleAssets = {}
