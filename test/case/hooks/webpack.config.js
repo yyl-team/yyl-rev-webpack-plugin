@@ -5,8 +5,6 @@ const extOs = require('yyl-os')
 const IPlugin = require('../../../')
 const ExtPlugin = require('./ext-plugin')
 
-console.log(IPlugin)
-
 // + plugin options
 const iPluginOption = {
   context: __dirname,

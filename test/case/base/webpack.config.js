@@ -4,8 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const extOs = require('yyl-os')
 const IPlugin = require('../../../')
 
-console.log(IPlugin)
-
 // + plugin options
 const iPluginOption = {
   context: __dirname,
