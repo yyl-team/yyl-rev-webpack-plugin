@@ -4,6 +4,7 @@
 
 - feat: 优化 log
 - feat: 更新 `yyl-webpack-plugin-base@1.0.6`
+
 ## 1.0.2 (2020-02-04)
 
 - fix: 修复 rev-manifiest 内容不全问题

@@ -2,7 +2,6 @@
 .rpt2_cache
 dist/**
 **/dist/**
-output/**
 node_modules/**
 **/node_modules/**
 *.yml
@@ -26,3 +25,5 @@ package-lock.json
 **/*.log
 .DS_Store
 **/.DS_Store
+rollup.configy.js
+tsconfig.json
