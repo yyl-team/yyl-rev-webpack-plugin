@@ -100,6 +100,9 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
     const { output } = compiler.options
 
     const { compilation, done } = await this.initCompilation(compiler)
+    Object.keys(compilation.assets).forEach((key) => {
+      console.log('ddd', key)
+    })
     const logger = compilation.getLogger(PLUGIN_NAME)
     logger.group(PLUGIN_NAME)
     const iHooks = getHooks(compilation)
@@ -172,6 +175,9 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
           if (rMap[key]) {
             // 需要额外生成文件
             if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
+              console.log('===', 'rMap[key]', rMap[key])
+              console.log('===', 'recyleAsset(rMap[key])', recyleAsset(rMap[key]))
+              console.log('===', 'compilation.assets[recyleAsset(rMap[key])]', compilation.assets[recyleAsset(rMap[key])])
               remoteFileInfoArr.push({
                 dist: recyleAsset(remoteMap[key]),
                 source: Buffer.from(
