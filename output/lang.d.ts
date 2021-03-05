@@ -8,4 +8,5 @@ export declare const LANG: {
     BUILD_EXTEND_INFO: string;
     BUILD_REMOTE_SOURCE: string;
     BUILD_BLANK_CSS: string;
+    BUILD_REV_FILE: string;
 };

@@ -1,5 +1,5 @@
 /*!
- * yyl-rev-webpack-plugin cjs 1.0.4
+ * yyl-rev-webpack-plugin cjs 1.0.5
  * (c) 2020 - 2021 
  * Released under the MIT License.
  */
@@ -53,7 +53,8 @@ const LANG = {
     BUILD_NOHASH_FILE: '生成无哈希文件',
     BUILD_EXTEND_INFO: '生成额外配置',
     BUILD_REMOTE_SOURCE: '生成本地文件',
-    BUILD_BLANK_CSS: '生成空白样式'
+    BUILD_BLANK_CSS: '生成空白样式',
+    BUILD_REV_FILE: '生成 manifest'
 };
 
 const iWeakMap = new WeakMap();
@@ -146,7 +147,7 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                     assetsInfo: fileInfo
                 });
             };
-            logger.info(`${LANG.BUILD_NOHASH_FILE}:`);
+            logger.info(`${chalk__default['default'].yellow(LANG.BUILD_NOHASH_FILE)}:`);
             Object.keys(this.assetMap).forEach((key) => {
                 // 创建 revMap
                 const src = formatAssets(key);
@@ -157,29 +158,30 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                     dist: key,
                     source: Buffer.from(compilation.assets[this.assetMap[key]].source().toString(), 'utf-8')
                 });
-                logger.info(`-> ${key}`);
+                logger.info(`-> ${chalk__default['default'].cyan(key)}`);
             });
             if (this.option.remote && this.option.remoteAddr) {
                 const requestUrl = formatUrl(this.option.remoteAddr);
-                logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${requestUrl}`);
+                logger.info(`${chalk__default['default'].yellow(LANG.FETCH_REMOTE_ADDR)}:`);
+                logger.info(`-> ${requestUrl}`);
                 let rs = '';
                 try {
                     rs = yield request__default['default'](requestUrl);
                 }
                 catch (err) {
-                    logger.warn(`${LANG.FETCH_FAIL}: ${err.message}`);
+                    logger.warn(`${chalk__default['default'].yellow(LANG.FETCH_FAIL)}: ${err.message}`);
                 }
                 if (rs) {
                     let remoteMap = {};
                     try {
                         remoteMap = JSON.parse(rs);
-                        logger.info(`${LANG.FETCH_SUCCESS}`);
+                        logger.info(`${chalk__default['default'].yellow(LANG.FETCH_SUCCESS)}:`);
                         Object.keys(remoteMap).forEach((key) => {
                             logger.info(`${key} -> ${chalk__default['default'].cyan(remoteMap[key])}`);
                         });
                     }
                     catch (er) {
-                        logger.info(`${LANG.REMOTE_PARSE_ERROR}: ${er.message}`);
+                        logger.info(`${chalk__default['default'].red(LANG.REMOTE_PARSE_ERROR)}: ${er.message}`);
                     }
                     const remoteFileInfoArr = [];
                     const blankCssFileInfoArr = [];
@@ -208,14 +210,14 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                         }
                     });
                     if (remoteFileInfoArr.length) {
-                        logger.info(`${LANG.BUILD_REMOTE_SOURCE}:`);
+                        logger.info(`${chalk__default['default'].yellow(LANG.BUILD_REMOTE_SOURCE)}:`);
                         remoteFileInfoArr.forEach((fileInfo) => {
                             addAssets(fileInfo);
                             logger.info(`-> ${chalk__default['default'].cyan(fileInfo.dist)}`);
                         });
                     }
                     if (blankCssFileInfoArr.length) {
-                        logger.info(`${LANG.BUILD_BLANK_CSS}:`);
+                        logger.info(`${chalk__default['default'].yellow(LANG.BUILD_BLANK_CSS)}:`);
                         blankCssFileInfoArr.forEach((fileInfo) => {
                             addAssets(fileInfo);
                             logger.info(`-> ${chalk__default['default'].cyan(fileInfo.dist)}`);
@@ -228,7 +230,7 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
             }
             if (this.option.extends) {
                 Object.assign(rMap, this.option.extends);
-                logger.info(`${LANG.BUILD_EXTEND_INFO}:`);
+                logger.info(`${chalk__default['default'].yellow(LANG.BUILD_EXTEND_INFO)}:`);
                 Object.keys(this.option.extends).forEach((key) => {
                     logger.info(`${chalk__default['default'].green(key)} -> ${chalk__default['default'].cyan(this.option.extends[key])}`);
                 });
@@ -241,6 +243,8 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
             revFileInfo = yield iHooks.afterRev.promise(revFileInfo);
             // add to assets
             addAssets(revFileInfo);
+            logger.info(`${chalk__default['default'].yellow(LANG.BUILD_REV_FILE)}:`);
+            logger.info(`-> ${chalk__default['default'].cyan(revFileInfo.dist)}`);
             yield iHooks.emit.promise();
             logger.groupEnd();
             done();

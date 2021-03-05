@@ -7,5 +7,6 @@ export const LANG = {
   BUILD_NOHASH_FILE: '生成无哈希文件',
   BUILD_EXTEND_INFO: '生成额外配置',
   BUILD_REMOTE_SOURCE: '生成本地文件',
-  BUILD_BLANK_CSS: '生成空白样式'
+  BUILD_BLANK_CSS: '生成空白样式',
+  BUILD_REV_FILE: '生成 manifest'
 }

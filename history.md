@@ -1,5 +1,10 @@
 # 历史版本
 
+## 1.0.5 (2021-03-05)
+
+- feat: 更新 `yyl-webpack-plugin-base@1.0.8`
+- feat: 调整 test-case
+
 ## 1.0.3 (2021-02-04)
 
 - feat: 优化 log
