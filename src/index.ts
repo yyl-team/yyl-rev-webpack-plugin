@@ -100,9 +100,6 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
     const { output } = compiler.options
 
     const { compilation, done } = await this.initCompilation(compiler)
-    Object.keys(compilation.assets).forEach((key) => {
-      console.log('ddd', key)
-    })
     const logger = compilation.getLogger(PLUGIN_NAME)
     logger.group(PLUGIN_NAME)
     const iHooks = getHooks(compilation)
@@ -126,7 +123,7 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
       })
     }
 
-    logger.info(`${LANG.BUILD_NOHASH_FILE}:`)
+    logger.info(`${chalk.yellow(LANG.BUILD_NOHASH_FILE)}:`)
 
     Object.keys(this.assetMap).forEach((key) => {
       // 创建 revMap
@@ -139,29 +136,30 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
         dist: key,
         source: Buffer.from(compilation.assets[this.assetMap[key]].source().toString(), 'utf-8')
       })
-      logger.info(`-> ${key}`)
+      logger.info(`-> ${chalk.cyan(key)}`)
     })
 
     if (this.option.remote && this.option.remoteAddr) {
       const requestUrl = formatUrl(this.option.remoteAddr)
-      logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${requestUrl}`)
+      logger.info(`${chalk.yellow(LANG.FETCH_REMOTE_ADDR)}:`)
+      logger.info(`-> ${requestUrl}`)
       let rs: string = ''
       try {
         rs = await request(requestUrl)
       } catch (err) {
-        logger.warn(`${LANG.FETCH_FAIL}: ${err.message}`)
+        logger.warn(`${chalk.yellow(LANG.FETCH_FAIL)}: ${err.message}`)
       }
 
       if (rs) {
         let remoteMap: ModuleAssets = {}
         try {
           remoteMap = JSON.parse(rs)
-          logger.info(`${LANG.FETCH_SUCCESS}`)
+          logger.info(`${chalk.yellow(LANG.FETCH_SUCCESS)}:`)
           Object.keys(remoteMap).forEach((key) => {
             logger.info(`${key} -> ${chalk.cyan(remoteMap[key])}`)
           })
         } catch (er) {
-          logger.info(`${LANG.REMOTE_PARSE_ERROR}: ${er.message}`)
+          logger.info(`${chalk.red(LANG.REMOTE_PARSE_ERROR)}: ${er.message}`)
         }
 
         const remoteFileInfoArr: AssetsInfo[] = []
@@ -175,9 +173,6 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
           if (rMap[key]) {
             // 需要额外生成文件
             if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
-              console.log('===', 'rMap[key]', rMap[key])
-              console.log('===', 'recyleAsset(rMap[key])', recyleAsset(rMap[key]))
-              console.log('===', 'compilation.assets[recyleAsset(rMap[key])]', compilation.assets[recyleAsset(rMap[key])])
               remoteFileInfoArr.push({
                 dist: recyleAsset(remoteMap[key]),
                 source: Buffer.from(
@@ -198,14 +193,14 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
         })
 
         if (remoteFileInfoArr.length) {
-          logger.info(`${LANG.BUILD_REMOTE_SOURCE}:`)
+          logger.info(`${chalk.yellow(LANG.BUILD_REMOTE_SOURCE)}:`)
           remoteFileInfoArr.forEach((fileInfo) => {
             addAssets(fileInfo)
             logger.info(`-> ${chalk.cyan(fileInfo.dist)}`)
           })
         }
         if (blankCssFileInfoArr.length) {
-          logger.info(`${LANG.BUILD_BLANK_CSS}:`)
+          logger.info(`${chalk.yellow(LANG.BUILD_BLANK_CSS)}:`)
           blankCssFileInfoArr.forEach((fileInfo) => {
             addAssets(fileInfo)
             logger.info(`-> ${chalk.cyan(fileInfo.dist)}`)
@@ -218,7 +213,7 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
 
     if (this.option.extends) {
       Object.assign(rMap, this.option.extends)
-      logger.info(`${LANG.BUILD_EXTEND_INFO}:`)
+      logger.info(`${chalk.yellow(LANG.BUILD_EXTEND_INFO)}:`)
       Object.keys(this.option.extends).forEach((key) => {
         logger.info(`${chalk.green(key)} -> ${chalk.cyan(this.option.extends[key])}`)
       })
@@ -237,6 +232,8 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
 
     // add to assets
     addAssets(revFileInfo)
+    logger.info(`${chalk.yellow(LANG.BUILD_REV_FILE)}:`)
+    logger.info(`-> ${chalk.cyan(revFileInfo.dist)}`)
 
     await iHooks.emit.promise()
 
