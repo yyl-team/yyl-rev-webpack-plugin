@@ -26,7 +26,7 @@
 
 • `Optional` **context**: *undefined* \| *string*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:21
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:15
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 扩展参数, 会追加到 rev json 里面
 
-Defined in: [src/index.ts:40](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L40)
+Defined in: src/index.ts:40
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 是否映射线上配置
 
-Defined in: [src/index.ts:38](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L38)
+Defined in: src/index.ts:38
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 线上配置地址，用于映射线上配置在本地生成一模一样的文件
 
-Defined in: [src/index.ts:34](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L34)
+Defined in: src/index.ts:34
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 映射线上配置时如线上对应本地 css 文件为空时，自动在本地生成空白css
 
-Defined in: [src/index.ts:36](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L36)
+Defined in: src/index.ts:36
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 rev 文件名称
 
-Defined in: [src/index.ts:30](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L30)
+Defined in: src/index.ts:30
 
 ___
 
@@ -86,4 +86,4 @@ ___
 
 rev 输出内容的相对地址
 
-Defined in: [src/index.ts:32](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L32)
+Defined in: src/index.ts:32

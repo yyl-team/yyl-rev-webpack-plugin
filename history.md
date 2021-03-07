@@ -1,23 +1,31 @@
 # 历史版本
 
+## 1.0.7 (2021-03-07)
+
+- feat: 调整 默认 revRoot, revFileName
+
+## 1.0.6 (2021-03-07)
+
+- feat: 更新 `yyl-webpack-plugin-base@0.2.1`
+
 ## 1.0.5 (2021-03-05)
 
-- feat: 更新 `yyl-webpack-plugin-base@1.0.8`
+- feat: 更新 `yyl-webpack-plugin-base@0.1.8`
 - feat: 调整 test-case
 
 ## 1.0.3 (2021-02-04)
 
 - feat: 优化 log
-- feat: 更新 `yyl-webpack-plugin-base@1.0.6`
+- feat: 更新 `yyl-webpack-plugin-base@0.1.6`
 
 ## 1.0.2 (2020-02-04)
 
 - fix: 修复 rev-manifiest 内容不全问题
-- feat: 更新 `yyl-webpack-plugin-base@1.0.3`
+- feat: 更新 `yyl-webpack-plugin-base@0.1.3`
 
 ## 1.0.1 (2020-02-03)
 
-- feat: 更新 `yyl-webpack-plugin-base@1.0.2`
+- feat: 更新 `yyl-webpack-plugin-base@0.1.2`
 
 ## 1.0.0 (2020-02-03)
 

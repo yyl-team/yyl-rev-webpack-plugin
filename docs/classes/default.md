@@ -16,7 +16,6 @@
 
 ### Properties
 
-- [alias](default.md#alias)
 - [assetMap](default.md#assetmap)
 - [context](default.md#context)
 - [filename](default.md#filename)
@@ -48,19 +47,9 @@ Name | Type |
 
 **Returns:** [*default*](default.md)
 
-Defined in: [src/index.ts:64](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L64)
+Defined in: src/index.ts:64
 
 ## Properties
-
-### alias
-
-• **alias**: Alias
-
-resolve.alias 绝对路径
-
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:57
-
-___
 
 ### assetMap
 
@@ -68,7 +57,7 @@ ___
 
 assetsMap
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:59
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:55
 
 ___
 
@@ -78,7 +67,7 @@ ___
 
 相对路径
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:51
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:49
 
 ___
 
@@ -88,7 +77,7 @@ ___
 
 输出文件格式
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:55
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:53
 
 ___
 
@@ -98,7 +87,7 @@ ___
 
 组件名称
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:53
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:51
 
 ___
 
@@ -106,7 +95,7 @@ ___
 
 • **option**: *Required*<[*YylRevWebpackPluginOption*](../interfaces/yylrevwebpackpluginoption.md)\>
 
-Defined in: [src/index.ts:56](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L56)
+Defined in: src/index.ts:56
 
 ## Methods
 
@@ -124,7 +113,7 @@ Name | Type |
 
 **Returns:** *void*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:72
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:68
 
 ___
 
@@ -140,7 +129,7 @@ Name | Type |
 
 **Returns:** *Promise*<*void*\>
 
-Defined in: [src/index.ts:99](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L99)
+Defined in: src/index.ts:99
 
 ___
 
@@ -160,7 +149,7 @@ Name | Type |
 
 **Returns:** *string*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:64
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:60
 
 ___
 
@@ -178,13 +167,13 @@ Name | Type |
 
 **Returns:** *string*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:62
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:58
 
 ___
 
 ### initCompilation
 
-▸ **initCompilation**(`compiler`: *Compiler*): *Promise*<InitEmitHooksResult\>
+▸ **initCompilation**(`op`: YylWebpackPluginBaseInitCompilationOption): *void*
 
 初始化 compilation
 
@@ -192,11 +181,11 @@ ___
 
 Name | Type |
 ------ | ------ |
-`compiler` | *Compiler* |
+`op` | YylWebpackPluginBaseInitCompilationOption |
 
-**Returns:** *Promise*<InitEmitHooksResult\>
+**Returns:** *void*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:66
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:62
 
 ___
 
@@ -214,7 +203,7 @@ Name | Type |
 
 **Returns:** *void*
 
-Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:70
+Defined in: node_modules/yyl-webpack-plugin-base/output/index.d.ts:66
 
 ___
 
@@ -232,7 +221,7 @@ Name | Type |
 
 **Returns:** *any*
 
-Defined in: [src/index.ts:52](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L52)
+Defined in: src/index.ts:52
 
 ___
 
@@ -244,4 +233,4 @@ hooks 用方法: 获取插件名称
 
 **Returns:** *string*
 
-Defined in: [src/index.ts:47](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/135f8c2/src/index.ts#L47)
+Defined in: src/index.ts:47
