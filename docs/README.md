@@ -1,3 +1,5 @@
+yyl-rev-webpack-plugin / [Exports](modules.md)
+
 # yyl-rev-webpack-plugin
 
 ## USAGE

@@ -1,5 +1,5 @@
 /*!
- * yyl-rev-webpack-plugin cjs 1.0.0
+ * yyl-rev-webpack-plugin cjs 1.0.7
  * (c) 2020 - 2021 
  * Released under the MIT License.
  */
@@ -53,7 +53,8 @@ const LANG = {
     BUILD_NOHASH_FILE: '生成无哈希文件',
     BUILD_EXTEND_INFO: '生成额外配置',
     BUILD_REMOTE_SOURCE: '生成本地文件',
-    BUILD_BLANK_CSS: '生成空白样式'
+    BUILD_BLANK_CSS: '生成空白样式',
+    BUILD_REV_FILE: '生成 manifest'
 };
 
 const iWeakMap = new WeakMap();
@@ -88,8 +89,8 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
         super(Object.assign(Object.assign({}, option), { name: PLUGIN_NAME }));
         this.option = {
             context: process.cwd(),
-            revFileName: '../assets/rev-manifest.json',
-            revRoot: '../',
+            revFileName: './assets/rev-manifest.json',
+            revRoot: './',
             remoteAddr: '',
             remoteBlankCss: false,
             remote: false,
@@ -125,125 +126,134 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
     apply(compiler) {
         return __awaiter(this, void 0, void 0, function* () {
             const { output } = compiler.options;
-            const logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
-            logger.group(PLUGIN_NAME);
-            const { compilation, done } = yield this.initCompilation(compiler);
-            const iHooks = getHooks(compilation);
-            const rMap = {};
-            const revRoot = path__default['default'].resolve(output.path || '', this.option.revRoot);
-            // 将基于 output.path 的相对地址转回 基于 revRoot 的
-            const formatAssets = function (iPath) {
-                return formatPath(path__default['default'].relative(revRoot, path__default['default'].join(output.path || '', iPath)));
-            };
-            // 将基于 revRoot 的相对地址转回 基于 output.path 的
-            const recyleAsset = function (iPath) {
-                return formatPath(path__default['default'].relative(output.path || '', path__default['default'].resolve(revRoot, iPath)));
-            };
-            // 添加rev文件到构建流
-            const addAssets = (fileInfo) => {
-                this.updateAssets({
-                    compilation,
-                    assetsInfo: fileInfo
-                });
-            };
-            logger.info(`${LANG.BUILD_NOHASH_FILE}:`);
-            Object.keys(this.assetMap).forEach((key) => {
-                // 创建 revMap
-                const src = formatAssets(key);
-                const dest = formatAssets(this.assetMap[key]);
-                rMap[src] = dest;
-                // 生成不带 hash 的文件
-                addAssets({
-                    dist: key,
-                    source: Buffer.from(compilation.assets[this.assetMap[key]].source().toString(), 'utf-8')
-                });
-                logger.info(`-> ${key}`);
-            });
-            if (this.option.remote && this.option.remoteAddr) {
-                const requestUrl = formatUrl(this.option.remoteAddr);
-                logger.info(`${LANG.FETCH_REMOTE_ADDR}: ${requestUrl}`);
-                let rs = '';
-                try {
-                    rs = yield request__default['default'](requestUrl);
-                }
-                catch (err) {
-                    logger.warn(`${LANG.FETCH_FAIL}: ${err.message}`);
-                }
-                if (rs) {
-                    let remoteMap = {};
-                    try {
-                        remoteMap = JSON.parse(rs);
-                        logger.info(`${LANG.FETCH_SUCCESS}`);
-                        Object.keys(remoteMap).forEach((key) => {
-                            logger.info(`${key} -> ${chalk__default['default'].cyan(remoteMap[key])}`);
+            this.initCompilation({
+                compiler,
+                onProcessAssets: (compilation) => __awaiter(this, void 0, void 0, function* () {
+                    const logger = compilation.getLogger(PLUGIN_NAME);
+                    logger.group(PLUGIN_NAME);
+                    const iHooks = getHooks(compilation);
+                    const rMap = {};
+                    const revRoot = path__default['default'].resolve(output.path || '', this.option.revRoot);
+                    // 将基于 output.path 的相对地址转回 基于 revRoot 的
+                    const formatAssets = function (iPath) {
+                        return formatPath(path__default['default'].relative(revRoot, path__default['default'].join(output.path || '', iPath)));
+                    };
+                    // 将基于 revRoot 的相对地址转回 基于 output.path 的
+                    const recyleAsset = function (iPath) {
+                        return formatPath(path__default['default'].relative(output.path || '', path__default['default'].resolve(revRoot, iPath)));
+                    };
+                    // 添加rev文件到构建流
+                    const addAssets = (fileInfo) => {
+                        this.updateAssets({
+                            compilation,
+                            assetsInfo: fileInfo
                         });
-                    }
-                    catch (er) {
-                        logger.info(`${LANG.REMOTE_PARSE_ERROR}: ${er.message}`);
-                    }
-                    const remoteFileInfoArr = [];
-                    const blankCssFileInfoArr = [];
-                    Object.keys(remoteMap).forEach((key) => {
-                        const iExt = path__default['default'].extname(key);
-                        if (!iExt) {
-                            return;
-                        }
-                        if (rMap[key]) {
-                            // 需要额外生成文件
-                            if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
-                                remoteFileInfoArr.push({
-                                    dist: recyleAsset(remoteMap[key]),
-                                    source: Buffer.from(compilation.assets[recyleAsset(rMap[key])].source().toString(), 'utf-8')
-                                });
-                            }
-                        }
-                        else {
-                            if (iExt === '.css' && this.option.remoteBlankCss) {
-                                // 空白css
-                                blankCssFileInfoArr.push({
-                                    dist: recyleAsset(remoteMap[key]),
-                                    source: Buffer.from('')
-                                });
-                            }
+                    };
+                    logger.info(`${chalk__default['default'].yellow(LANG.BUILD_NOHASH_FILE)}:`);
+                    Object.keys(this.assetMap).forEach((key) => {
+                        // 创建 revMap
+                        const src = formatAssets(key);
+                        const dest = formatAssets(this.assetMap[key]);
+                        const curAsset = compilation.assets[this.assetMap[key]];
+                        rMap[src] = dest;
+                        if (curAsset) {
+                            // 生成不带 hash 的文件
+                            addAssets({
+                                dist: key,
+                                source: Buffer.from(curAsset.source().toString(), 'utf-8')
+                            });
+                            logger.info(`-> ${chalk__default['default'].cyan(key)}`);
                         }
                     });
-                    if (remoteFileInfoArr.length) {
-                        logger.info(`${LANG.BUILD_REMOTE_SOURCE}:`);
-                        remoteFileInfoArr.forEach((fileInfo) => {
-                            addAssets(fileInfo);
-                            logger.info(`-> ${chalk__default['default'].cyan(fileInfo.dist)}`);
+                    if (this.option.remote && this.option.remoteAddr) {
+                        const requestUrl = formatUrl(this.option.remoteAddr);
+                        logger.info(`${chalk__default['default'].yellow(LANG.FETCH_REMOTE_ADDR)}:`);
+                        logger.info(`-> ${requestUrl}`);
+                        let rs = '';
+                        try {
+                            rs = yield request__default['default'](requestUrl);
+                        }
+                        catch (err) {
+                            logger.warn(`${chalk__default['default'].yellow(LANG.FETCH_FAIL)}: ${err.message}`);
+                        }
+                        if (rs) {
+                            let remoteMap = {};
+                            try {
+                                remoteMap = JSON.parse(rs);
+                                logger.info(`${chalk__default['default'].yellow(LANG.FETCH_SUCCESS)}:`);
+                                Object.keys(remoteMap).forEach((key) => {
+                                    logger.info(`${key} -> ${chalk__default['default'].cyan(remoteMap[key])}`);
+                                });
+                            }
+                            catch (er) {
+                                logger.info(`${chalk__default['default'].red(LANG.REMOTE_PARSE_ERROR)}: ${er.message}`);
+                            }
+                            const remoteFileInfoArr = [];
+                            const blankCssFileInfoArr = [];
+                            Object.keys(remoteMap).forEach((key) => {
+                                const iExt = path__default['default'].extname(key);
+                                if (!iExt) {
+                                    return;
+                                }
+                                if (rMap[key]) {
+                                    // 需要额外生成文件
+                                    if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
+                                        remoteFileInfoArr.push({
+                                            dist: recyleAsset(remoteMap[key]),
+                                            source: Buffer.from(compilation.assets[recyleAsset(rMap[key])].source().toString(), 'utf-8')
+                                        });
+                                    }
+                                }
+                                else {
+                                    if (iExt === '.css' && this.option.remoteBlankCss) {
+                                        // 空白css
+                                        blankCssFileInfoArr.push({
+                                            dist: recyleAsset(remoteMap[key]),
+                                            source: Buffer.from('')
+                                        });
+                                    }
+                                }
+                            });
+                            if (remoteFileInfoArr.length) {
+                                logger.info(`${chalk__default['default'].yellow(LANG.BUILD_REMOTE_SOURCE)}:`);
+                                remoteFileInfoArr.forEach((fileInfo) => {
+                                    addAssets(fileInfo);
+                                    logger.info(`-> ${chalk__default['default'].cyan(fileInfo.dist)}`);
+                                });
+                            }
+                            if (blankCssFileInfoArr.length) {
+                                logger.info(`${chalk__default['default'].yellow(LANG.BUILD_BLANK_CSS)}:`);
+                                blankCssFileInfoArr.forEach((fileInfo) => {
+                                    addAssets(fileInfo);
+                                    logger.info(`-> ${chalk__default['default'].cyan(fileInfo.dist)}`);
+                                });
+                            }
+                        }
+                    }
+                    else {
+                        logger.info(LANG.DISABLE_FETCH_REMOTE);
+                    }
+                    if (this.option.extends) {
+                        Object.assign(rMap, this.option.extends);
+                        logger.info(`${chalk__default['default'].yellow(LANG.BUILD_EXTEND_INFO)}:`);
+                        Object.keys(this.option.extends).forEach((key) => {
+                            logger.info(`${chalk__default['default'].green(key)} -> ${chalk__default['default'].cyan(this.option.extends[key])}`);
                         });
                     }
-                    if (blankCssFileInfoArr.length) {
-                        logger.info(`${LANG.BUILD_BLANK_CSS}:`);
-                        blankCssFileInfoArr.forEach((fileInfo) => {
-                            addAssets(fileInfo);
-                            logger.info(`-> ${chalk__default['default'].cyan(fileInfo.dist)}`);
-                        });
-                    }
-                }
-            }
-            else {
-                logger.info(LANG.DISABLE_FETCH_REMOTE);
-            }
-            if (this.option.extends) {
-                Object.assign(rMap, this.option.extends);
-                logger.info(`${LANG.BUILD_EXTEND_INFO}:`);
-                Object.keys(this.option.extends).forEach((key) => {
-                    logger.info(`${chalk__default['default'].green(key)} -> ${chalk__default['default'].cyan(this.option.extends[key])}`);
-                });
-            }
-            let revFileInfo = {
-                dist: path__default['default'].relative(output.path || '', path__default['default'].resolve(output.path || '', this.option.revFileName)),
-                source: Buffer.from(JSON.stringify(rMap, null, 2), 'utf-8')
-            };
-            // hook afterRev
-            revFileInfo = yield iHooks.afterRev.promise(revFileInfo);
-            // add to assets
-            addAssets(revFileInfo);
-            yield iHooks.emit.promise();
-            logger.groupEnd();
-            done();
+                    let revFileInfo = {
+                        dist: path__default['default'].relative(output.path || '', path__default['default'].resolve(output.path || '', this.option.revFileName)),
+                        source: Buffer.from(JSON.stringify(rMap, null, 2), 'utf-8')
+                    };
+                    // hook afterRev
+                    revFileInfo = yield iHooks.afterRev.promise(revFileInfo);
+                    // add to assets
+                    addAssets(revFileInfo);
+                    logger.info(`${chalk__default['default'].yellow(LANG.BUILD_REV_FILE)}:`);
+                    logger.info(`-> ${chalk__default['default'].cyan(revFileInfo.dist)}`);
+                    yield iHooks.emit.promise();
+                    logger.groupEnd();
+                })
+            });
         });
     }
 }

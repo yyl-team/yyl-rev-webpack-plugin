@@ -1,16 +1,16 @@
 'use strict'
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const extOs = require('yyl-os')
 const IPlugin = require('../../../')
-
-console.log(IPlugin)
 
 // + plugin options
 const iPluginOption = {
   context: __dirname,
   remote: true,
-  remoteAddr: 'https://web.yystatic.com/project/yycom/pc/assets/rev-manifest.json',
+  remoteAddr: 'https://web.yystatic.com/project/yycom_header/pc/assets/rev-manifest.json',
   remoteBlankCss: true,
   extends: {
     ext01: +new Date()
@@ -25,9 +25,9 @@ const wConfig = {
     index: ['./src/entry/index/index.js']
   },
   output: {
-    path: path.join(__dirname, './dist/js'),
-    filename: '[name]-[chunkhash:8].js',
-    chunkFilename: 'async_component/[name]-[chunkhash:8].js'
+    path: path.join(__dirname, './dist/'),
+    filename: 'js/[name]-[chunkhash:8].js',
+    chunkFilename: 'js/async_component/[name]-[chunkhash:8].js'
   },
   module: {
     rules: [
@@ -41,11 +41,15 @@ const wConfig = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'url-loader'
+        loader: 'url-loader',
+        options: {
+          limit: 0,
+          name: 'images/[name]-[hash:8].[ext]'
+        }
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   },
@@ -56,21 +60,22 @@ const wConfig = {
   },
   devtool: 'source-map',
   plugins: [
-    new IPlugin(iPluginOption),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name]-[chunkhash:8].css'
+    }),
     new HtmlWebpackPlugin({
       template: './src/entry/index/index.html',
-      filename: '../html/index.html',
+      filename: 'html/index.html',
       chunks: 'all'
-    })
+    }),
+    new IPlugin(iPluginOption)
   ],
   devServer: {
-    contentBase: './dist',
-    compress: true,
+    static: './dist',
     port: 5000,
-    writeToDisk: true,
-    async after() {
-      await extOs.openBrowser('http://127.0.0.1:5000/html/')
-    }
+    open: true,
+    openPage: 'http://127.0.0.1:5000/html/'
   }
 }
 
