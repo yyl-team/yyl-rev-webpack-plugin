@@ -47,7 +47,7 @@ Name | Type |
 
 **Returns:** [*default*](default.md)
 
-Defined in: src/index.ts:64
+Defined in: [src/index.ts:64](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/1329fd5/src/index.ts#L64)
 
 ## Properties
 
@@ -95,7 +95,7 @@ ___
 
 • **option**: *Required*<[*YylRevWebpackPluginOption*](../interfaces/yylrevwebpackpluginoption.md)\>
 
-Defined in: src/index.ts:56
+Defined in: [src/index.ts:56](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/1329fd5/src/index.ts#L56)
 
 ## Methods
 
@@ -129,7 +129,7 @@ Name | Type |
 
 **Returns:** *Promise*<*void*\>
 
-Defined in: src/index.ts:99
+Defined in: [src/index.ts:99](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/1329fd5/src/index.ts#L99)
 
 ___
 
@@ -221,7 +221,7 @@ Name | Type |
 
 **Returns:** *any*
 
-Defined in: src/index.ts:52
+Defined in: [src/index.ts:52](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/1329fd5/src/index.ts#L52)
 
 ___
 
@@ -233,4 +233,4 @@ hooks 用方法: 获取插件名称
 
 **Returns:** *string*
 
-Defined in: src/index.ts:47
+Defined in: [src/index.ts:47](https://github.com/jackness1208/yyl-rev-webpack-plugin/blob/1329fd5/src/index.ts#L47)
