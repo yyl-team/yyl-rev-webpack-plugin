@@ -1,5 +1,5 @@
 /*!
- * yyl-rev-webpack-plugin cjs 1.0.9
+ * yyl-rev-webpack-plugin cjs 1.0.10
  * (c) 2020 - 2021 
  * Released under the MIT License.
  */
