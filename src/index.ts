@@ -1,5 +1,5 @@
 import path from 'path'
-import request from 'request-promise'
+import axios from 'axios'
 import chalk from 'chalk'
 import { Compilation, Compiler } from 'webpack'
 import { LANG } from './lang'
@@ -148,9 +148,13 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
           const requestUrl = formatUrl(this.option.remoteAddr)
           logger.info(`${chalk.yellow(LANG.FETCH_REMOTE_ADDR)}:`)
           logger.info(`-> ${requestUrl}`)
-          let rs: string = ''
+          let rs: ModuleAssets = {}
           try {
-            rs = await request(requestUrl)
+            rs = (
+              await axios.get<ModuleAssets>(requestUrl, {
+                timeout: 5000
+              })
+            ).data
           } catch (err) {
             logger.warn(`${chalk.yellow(LANG.FETCH_FAIL)}: ${err.message}`)
           }
@@ -158,7 +162,7 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
           if (rs) {
             let remoteMap: ModuleAssets = {}
             try {
-              remoteMap = JSON.parse(rs)
+              remoteMap = rs
               logger.info(`${chalk.yellow(LANG.FETCH_SUCCESS)}:`)
               Object.keys(remoteMap).forEach((key) => {
                 logger.info(`${key} -> ${chalk.cyan(remoteMap[key])}`)
