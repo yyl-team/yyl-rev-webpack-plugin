@@ -1,5 +1,5 @@
 /*!
- * yyl-rev-webpack-plugin cjs 1.0.8
+ * yyl-rev-webpack-plugin cjs 1.0.9
  * (c) 2020 - 2021 
  * Released under the MIT License.
  */
@@ -8,7 +8,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var path = require('path');
-var request = require('request-promise');
+var axios = require('axios');
 var chalk = require('chalk');
 var tapable = require('tapable');
 var yylWebpackPluginBase = require('yyl-webpack-plugin-base');
@@ -16,7 +16,7 @@ var yylWebpackPluginBase = require('yyl-webpack-plugin-base');
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var path__default = /*#__PURE__*/_interopDefaultLegacy(path);
-var request__default = /*#__PURE__*/_interopDefaultLegacy(request);
+var axios__default = /*#__PURE__*/_interopDefaultLegacy(axios);
 var chalk__default = /*#__PURE__*/_interopDefaultLegacy(chalk);
 
 /*! *****************************************************************************
@@ -169,9 +169,11 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                         const requestUrl = formatUrl(this.option.remoteAddr);
                         logger.info(`${chalk__default['default'].yellow(LANG.FETCH_REMOTE_ADDR)}:`);
                         logger.info(`-> ${requestUrl}`);
-                        let rs = '';
+                        let rs = {};
                         try {
-                            rs = yield request__default['default'](requestUrl);
+                            rs = (yield axios__default['default'].get(requestUrl, {
+                                timeout: 5000
+                            })).data;
                         }
                         catch (err) {
                             logger.warn(`${chalk__default['default'].yellow(LANG.FETCH_FAIL)}: ${err.message}`);
@@ -179,7 +181,7 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                         if (rs) {
                             let remoteMap = {};
                             try {
-                                remoteMap = JSON.parse(rs);
+                                remoteMap = rs;
                                 logger.info(`${chalk__default['default'].yellow(LANG.FETCH_SUCCESS)}:`);
                                 Object.keys(remoteMap).forEach((key) => {
                                     logger.info(`${key} -> ${chalk__default['default'].cyan(remoteMap[key])}`);
