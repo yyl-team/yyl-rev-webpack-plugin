@@ -1,5 +1,9 @@
 # 历史版本
 
+## 1.0.10 (2021-05-16)
+
+- feat: 去掉 `@types/axios`
+
 ## 1.0.9 (2021-05-16)
 
 - feat: 替换 `request-promise` -> `axios`

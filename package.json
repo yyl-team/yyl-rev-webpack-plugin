@@ -1,5 +1,5 @@
 {
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "output/index.js",
   "types": "output/index.d.ts",
   "eslintConfig": {
@@ -67,7 +67,6 @@
   "author": "liudaojie <liudaojie@yy.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/axios": "^0.14.0",
     "@types/webpack": "^5.28.0",
     "axios": "^0.21.1",
     "tapable": "^2.2.0",
