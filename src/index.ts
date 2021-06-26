@@ -135,10 +135,11 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
           rMap[src] = dest
 
           if (curAsset) {
+            const iSource = curAsset.source()
             // 生成不带 hash 的文件
             addAssets({
               dist: key,
-              source: Buffer.from(curAsset.source().toString(), 'utf-8')
+              source: typeof iSource === 'string' ? Buffer.from(iSource, 'utf-8') : iSource
             })
             logger.info(`-> ${chalk.cyan(key)}`)
           }
@@ -182,12 +183,10 @@ export default class YylRevWebpackPlugin extends YylWebpackPluginBase {
               if (rMap[key]) {
                 // 需要额外生成文件
                 if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
+                  const iSource = compilation.assets[recyleAsset(rMap[key])].source()
                   remoteFileInfoArr.push({
                     dist: recyleAsset(remoteMap[key]),
-                    source: Buffer.from(
-                      compilation.assets[recyleAsset(rMap[key])].source().toString(),
-                      'utf-8'
-                    )
+                    source: typeof iSource === 'string' ? Buffer.from(iSource) : iSource
                   })
                 }
               } else {
