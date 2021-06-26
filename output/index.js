@@ -1,5 +1,5 @@
 /*!
- * yyl-rev-webpack-plugin cjs 1.0.10
+ * yyl-rev-webpack-plugin cjs 1.0.11
  * (c) 2020 - 2021 
  * Released under the MIT License.
  */
@@ -157,10 +157,11 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                         const curAsset = compilation.assets[this.assetMap[key]];
                         rMap[src] = dest;
                         if (curAsset) {
+                            const iSource = curAsset.source();
                             // 生成不带 hash 的文件
                             addAssets({
                                 dist: key,
-                                source: Buffer.from(curAsset.source().toString(), 'utf-8')
+                                source: typeof iSource === 'string' ? Buffer.from(iSource, 'utf-8') : iSource
                             });
                             logger.info(`-> ${chalk__default['default'].cyan(key)}`);
                         }
@@ -200,9 +201,10 @@ class YylRevWebpackPlugin extends yylWebpackPluginBase.YylWebpackPluginBase {
                                 if (rMap[key]) {
                                     // 需要额外生成文件
                                     if (rMap[key] !== remoteMap[key] && compilation.assets[recyleAsset(rMap[key])]) {
+                                        const iSource = compilation.assets[recyleAsset(rMap[key])].source();
                                         remoteFileInfoArr.push({
                                             dist: recyleAsset(remoteMap[key]),
-                                            source: Buffer.from(compilation.assets[recyleAsset(rMap[key])].source().toString(), 'utf-8')
+                                            source: typeof iSource === 'string' ? Buffer.from(iSource) : iSource
                                         });
                                     }
                                 }
